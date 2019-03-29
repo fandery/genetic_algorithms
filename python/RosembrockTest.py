@@ -29,8 +29,8 @@ problem = Rosembrock(MinX1, MaxX1, MinX2, MaxX2, IndividualSize)
 #real =problem.x1Real(decimal)
 #print(real)
 
-MaxGeneration = 100
-Target = 0.00001
+MaxGeneration = 1000
+Target = 0.05
 Elitism = True
 
 
