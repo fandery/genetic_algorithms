@@ -34,7 +34,7 @@ class genetic_algorithm(object):
         return individual
 
     def __mutationTest(self):
-        return round(np.random.rand())
+        return np.random.rand() > self.__mutationRate
         
     def __bestFitness(self):
         pop_fit = self.problem.fitness(self.population)
