@@ -11,57 +11,31 @@ class genetic_algorithm(object):
     classdocs
     '''
 
-    def __init__(self, problem, mutation_rate, elitism=None):
+    def __init__(self, problem, mutation_rate, elitism=False):
         '''
         Constructor
         '''
         self.__mutationRate = mutation_rate
-        if(elitism == None):
-            self.__elitism = False
-        else:
-            self.__elitism = elitism
+        self.__elitism = elitism
         self.problem = problem
         self.best_fit = 0
         self.best_individual = []
 
     def __mutation(self, individual):
-
         if self.__mutationTest():
-            randomPosition = int(np.random.uniform(
-                0, self.problem.getIndividualSize()-1))
+            randomPosition = int(np.random.uniform(0, self.problem.individual_size - 1))
 #             print('Mutation at position: %d' %randomPosition)
             # get a random value for changing in the individual position selected before
-            randomValue = np.random.uniform(
-                self.problem.getMinGeneSymbol(), self.problem.getMaxGeneSymbol())
+            randomValue = np.random.uniform(self.problem.getMinGeneSymbol(), 
+                                            self.problem.getMaxGeneSymbol())
 
-            if(randomValue <= 0.5):
-                randomValue = int(randomValue)
-            else:
-                randomValue = int(randomValue+1)
-
-#             print('New gene value: %d' %randomValue)
-
-            individual[randomPosition] = randomValue
+            individual[randomPosition] = round(randomValue)
+            
         return individual
 
     def __mutationTest(self):
-        a = [0, 1]
-        p = [1-self.__mutationRate, self.__mutationRate]
-        # Get the cumulative sum of the probabilities.
-        cumSumP = np.cumsum(p)
-        # Get our random numbers - one for each column.
-        randomNumber = np.random.rand()
-        # Get the values from A.
-        # If the random number is less than the cumulative probability then
-        # that's the number to use from A.
-        for i, total in enumerate(cumSumP):
-            if randomNumber < total:
-                break
-        test = a[i]
-#         if test == 1:
-#             print('Mutation!')
-        return test
-
+        return round(np.random.rand())
+        
     def __bestFitness(self):
         pop_fit = self.problem.fitness(self.population)
 #         print(pop_fit)
@@ -71,51 +45,28 @@ class genetic_algorithm(object):
         return best_fit, best_individual
 
     def __crossover3(self, individual_x, individual_y):
-
-        n = self.problem.getIndividualSize()
-
+        n = self.problem.individual_size
         c = np.random.uniform(1, n)
-        d = np.random.uniform(1, n)
+        d = np.random.uniform(c, n)
 #         print("crossing point 1: %d" %c)
 #         print("crossing point 2: %d" %d)
 
-        new_individual_x = []
-        new_individual_y = []
+        def create_individual(ind_x, ind_y):
+            return [*ind_x[:c], *ind_y[c:d], *ind_x[d:]]
 
-        # concatenate the two fathers in the C element chosen randomly
-        for gene in range(c):
-            new_individual_x.append(individual_x[gene])
-            new_individual_y.append(individual_y[gene])
-
-        for gene in range(c, d):
-            new_individual_y.append(individual_y[gene])
-            new_individual_x.append(individual_x[gene])
-
-        for gene in range(d, n):
-            new_individual_x.append(individual_x[gene])
-            new_individual_y.append(individual_y[gene])
-
-        return new_individual_x, new_individual_y
+        return (
+            create_individual(individual_x, individual_y),
+            create_individual(individual_y, individual_x),
+        )
 
     def __crossover(self, individual_x, individual_y):
-
-        n = self.problem.getIndividualSize()
-
-        c = int(np.random.uniform(0, n-1))
+        c = int(np.random.uniform(0, self.problem.individual_size-1))
 #         print("crossing point: %d" %c)
 
-        new_individual_x = []
-        new_individual_y = []
-
-        # concatenate the two fathers in the C element chosen randomly
-        for gene in range(c):
-            new_individual_x.append(individual_x[gene])
-            new_individual_y.append(individual_y[gene])
-        for gene in range(c, n):
-            new_individual_x.append(individual_y[gene])
-            new_individual_y.append(individual_x[gene])
-
-        return new_individual_x, new_individual_y
+        return (
+            [*individual_x[:c], *individual_y[c:]],
+            [*individual_y[:c], *individual_x[c:]]
+        )
     
     def __get_cum_sum_for_pop(self):
         self.population = sorted(self.population, key=self.problem.getFitness, reverse=True)
