@@ -13,7 +13,7 @@ from RosembrockExample import Rosembrock
 import matplotlib.pyplot as plt
 
 
-NumIndividuals = 100
+NumIndividuals = 200
 MinX1 = -2
 MaxX1 = 2
 MinX2 = -1

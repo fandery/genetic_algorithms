@@ -26,7 +26,7 @@ class genetic_algorithm(object):
         
         if self.__mutationTest():
             randomPosition = int(np.random.uniform(0,self.problem.getIndividualSize()-1))
-            print('Mutation at position: %d' %randomPosition)
+            #print('Mutation at position: %d' %randomPosition)
             #get a random value for changing in the individual position selected before
             randomValue = np.random.uniform(self.problem.getMinGeneSymbol(),self.problem.getMaxGeneSymbol())
          
@@ -35,7 +35,7 @@ class genetic_algorithm(object):
             else:
                 randomValue = int(randomValue+1)
             
-            print('New gene value: %d' %randomValue)
+            #print('New gene value: %d' %randomValue)
             
             individual[randomPosition]=randomValue
         return individual
@@ -54,8 +54,8 @@ class genetic_algorithm(object):
             if randomNumber < total:
                 break
         test=a[i]
-        if test == 1:
-            print('Mutation!')
+        #if test == 1:
+        #    print('Mutation!')
         return test
     
     def __bestFitness(self):
@@ -78,8 +78,8 @@ class genetic_algorithm(object):
         
         c = np.random.uniform(1,n)
         d = np.random.uniform(1,n)    
-        print("crossing point 1: %d" %c)
-        print("crossing point 2: %d" %d)
+        #print("crossing point 1: %d" %c)
+        #print("crossing point 2: %d" %d)
         
         new_individual_x=[]
         new_individual_y=[]
@@ -105,7 +105,7 @@ class genetic_algorithm(object):
         n=self.problem.getIndividualSize()
         
         c = int(np.random.uniform(0,n-1))
-        print("crossing point: %d" %c)
+        #print("crossing point: %d" %c)
         
         new_individual_x=[]
         new_individual_y=[]
@@ -147,7 +147,7 @@ class genetic_algorithm(object):
         self.population = sorted_population
         selected = self.population[i]
         #Display it. Uncomment for log.
-        print("Selected individual [%d] = %s" %(i,selected))
+        #print("Selected individual [%d] = %s" %(i,selected))
         return selected
         
     def __newPopulation(self,population_size):
@@ -172,8 +172,8 @@ class genetic_algorithm(object):
             new_individual_x = self.__mutation(new_individual_x)
             new_individual_y = self.__mutation(new_individual_y)
             
-            print('New individual x: %s'%new_individual_x)
-            print('New individual y: %s'%new_individual_y)
+            #print('New individual x: %s'%new_individual_x)
+            #print('New individual y: %s'%new_individual_y)
             
             new_population.append(new_individual_x)
             new_population.append(new_individual_y)
@@ -183,21 +183,21 @@ class genetic_algorithm(object):
         
         generation = 1
         fit_historical=[]
-        last_best_fit = 0 
+        #last_best_fit = 0 
         
         self.population = self.problem.initPopulation(population_size)
         
         self.best_fit,self.best_individual = self.__bestFitness()
                 
         print("Generation: %d" %generation)
-        print("Population: %s" %self.population)
+        #print("Population: %s" %self.population)
         print("Best fit: Individual [%d] = %g" %(self.best_individual,self.best_fit))
         
         fit_historical.append(self.best_fit)
                 
         #while (np.abs(self.best_fit-last_best_fit) > target) and (generation < max_generation):
-        while (generation < max_generation):
-            
+        while (generation < max_generation):                     
+                
             generation=generation+1
             
             self.population=self.__newPopulation(population_size)      
@@ -205,12 +205,12 @@ class genetic_algorithm(object):
             self.best_fit,self.best_individual = self.__bestFitness()
     
             print("\r\nGeneration: %d" %generation)
-            print("Population: %s" %self.population)
+            #print("Population: %s" %self.population)
             print("Best fit: Individual[%d] = %g" %(self.best_individual,self.best_fit))
             
             fit_historical.append(self.best_fit)
                         
-            
+       
         print("Solution found: %s\r\n" %self.population[self.best_individual])
         
         self.problem.printSolution(self.population[self.best_individual])

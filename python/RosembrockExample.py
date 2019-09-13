@@ -53,7 +53,7 @@ class Rosembrock(object):
                
     def fitness(self,population):
         
-        print(population)
+        #print(population)
         fitnessPop=[]
         #calculate the fitness for each individual of population
         for individual in population:
